@@ -1,23 +1,56 @@
 package edu.craptocraft;
 
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 public class Address {
-    private String publicKey;
-    private String privateKey;
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
 
-    public String getPublicKey() {
-        return publicKey;
-    }
+    private final String symbol = "EZI";
 
-    public String getPrivateKey() {
-        return privateKey;
-    }
+    private Double balance = 0d;
 
-    private GenSig gensig = new GenSig();
+
 
     public Address() {}
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(publicKey.hashCode() + "\n")
+                .append("EZI: " + balance);
+        return sb.toString();
+    }
+
     public void generateKeyPair(){
-        publicKey = gensig.generateKey();
-        privateKey = gensig.generateKey();
+        KeyPair keyPair = GenSig.generateKeyPair();
+        publicKey = keyPair.getPublic();
+        privateKey = keyPair.getPrivate();
+    }
+
+    public PublicKey getPK() {
+        return publicKey;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public void transferEZI(double ezi) {
+        this.balance += ezi;
+    }
+
+    public void send(TokenContract contract, double ezi) {
+        if (this.balance >= ezi){
+            contract.payable(this, ezi);
+            this.balance -= ezi;
+
+        }
     }
 }
