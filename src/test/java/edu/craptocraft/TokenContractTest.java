@@ -58,17 +58,4 @@ public class TokenContractTest {
         assertEquals(balanceDeOwnerEsperado, tokenContract.balanceOf(owner.getPK()), 0.0);
     }
 
-    public void testPayable() {
-        Address receptor = new Address();
-        receptor.generateKeyPair();
-
-        double ezi = 200.0;
-        double unitsNumber = Math.floor(ezi / 10.0);
-        double initialBalance = receptor.getBalance();
-
-        tokenContract.payable(receptor, ezi);
-
-        double expectedBalance = initialBalance + unitsNumber;
-        assertEquals(expectedBalance, receptor.getBalance(), 0.0);
-    }
 }
